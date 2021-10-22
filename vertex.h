@@ -8,12 +8,17 @@ using namespace std;
 template<typename T>
 class vertex {
 public:
-    vertex *next;
+    vertex<T> *next;
     T data;
 
     vertex(T, vertex *);
 
     vertex(T);
+
+    template<typename Type>
+    friend ostream &operator<<(ostream &, const vertex<Type> &);
+
+
 };
 
 template<typename T>
@@ -28,6 +33,10 @@ vertex<T>::vertex(T m) {
     next = nullptr;
 }
 
-
+template<typename T>
+ostream& operator<<(ostream& out, const vertex<T>& a) {
+    out << a.data;
+    return out;
+}
 
 #endif
