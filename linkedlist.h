@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include "vertex.h"
+#include <cassert>
+
 using namespace std;
 
 template<typename T>
@@ -54,7 +56,11 @@ public:
             begpush(v);
         } else {
             for (int i = 2; i < pos; i++) {
-                wh = wh->next;
+                if(wh == nullptr){
+                    throw "Bad index";
+                }else {
+                    wh = wh->next;
+                }
             }
             vtx->next = wh->next;
             wh->next = vtx;
@@ -66,6 +72,25 @@ public:
             vertex<T> *temp = head;
             head = head->next;
             delete temp;
+        }
+    }
+
+    void enddel() {
+        if (!empty()) {
+            vertex<T> *pre = head;
+            vertex<T> *temp = head->next;
+            if (temp != nullptr) {
+                while (temp->next != nullptr && temp != nullptr) {
+                    pre = pre->next;
+                    temp = temp->next;
+                }
+                pre->next = nullptr;
+                delete temp;
+                tail = pre;
+            } else {
+                head = nullptr;
+                tail = nullptr;
+            }
         }
     }
 
@@ -106,15 +131,20 @@ public:
             if (wh->data == value) {
                 return pos;
             }
+            wh=wh->next;
             pos++;
         }
-        return pos;
+        return -1;
     }
 
     T &operator[](int i) const{
         vertex<T> *wh = head;
         for(int j=0;j<i;j++){
-            wh=wh->next;
+            if(wh==nullptr){
+                throw "Wrong index";
+            }else{
+                wh=wh->next;
+            }
         }
         return wh->data;
     }
